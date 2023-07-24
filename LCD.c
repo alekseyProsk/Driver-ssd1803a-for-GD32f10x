@@ -47,29 +47,25 @@ void LCD_i2c_send_command(uint32_t cmd, uint32_t addr)
             return;
         }
     };
-		i2c_flag_clear(I2C1, I2C_FLAG_ADDSEND);////must be
-		while(!i2c_flag_get(I2C1, I2C_FLAG_TBE));//
+	i2c_flag_clear(I2C1, I2C_FLAG_ADDSEND);////must be
+	
+	while(!i2c_flag_get(I2C1, I2C_FLAG_TBE));//
 		
-		i2c_ack_config(I2C1, I2C_ACK_ENABLE);
+	i2c_ack_config(I2C1, I2C_ACK_ENABLE);
 		
-    i2c_data_transmit(I2C1, 0x00);
+	i2c_data_transmit(I2C1, 0x00);
         /* wait until the TBE bit is set */
-    while(!i2c_flag_get(I2C1, I2C_FLAG_TBE));
+    	while(!i2c_flag_get(I2C1, I2C_FLAG_TBE));
 		
-		i2c_data_transmit(I2C1, cmd);
+	i2c_data_transmit(I2C1, cmd);
 		
 		//while(!i2c_flag_get(I2C1, I2C_FLAG_TBE));
-		i2c_ack_config(I2C1, I2C_ACK_DISABLE);
+	i2c_ack_config(I2C1, I2C_ACK_DISABLE);
 		
-		i2c_stop_on_bus(I2C1);
+	i2c_stop_on_bus(I2C1);
     /* wait until stop condition generate */ 
 	
-		while (I2C_CTL0(I2C1) & I2C_CTL0_STOP);  
-		
-		//delay_1ms(250);
-		
-		
-		
+     	while (I2C_CTL0(I2C1) & I2C_CTL0_STOP);  			
 }
 
 void LCD_home()
@@ -95,13 +91,13 @@ void LCD_i2cInit()
 
 
 	//RE = 0  |  IS = 1
-		LCD_i2c_send_command(COMMAND_8BIT_4LINES_RE0_IS1, LCD_DISPLAY_ADDRESS);  //Function set : RE = 0, IS = 1
-		LCD_i2c_send_command(COMMAND_DISPLAY_ON_CURSOR_OFF_BLINK_OFF, LCD_DISPLAY_ADDRESS);  //Display ON (without cursor...)
-		LCD_i2c_send_command(COMMAND_BS0_1, LCD_DISPLAY_ADDRESS);  //Set BS0 = 1 (1/6 bias) / Internal frequency..
-		LCD_i2c_send_command(COMMAND_INTERNAL_DIVIDER_680, LCD_DISPLAY_ADDRESS); //Internal divider
-		LCD_i2c_send_command(COMMAND_CONTRAST, LCD_DISPLAY_ADDRESS); //Constrast
-		LCD_i2c_send_command(COMMAND_POWER_ICON_CONTRAST, LCD_DISPLAY_ADDRESS);  //Power Icon control contrast
-		LCD_i2c_send_command(COMMAND_FOLLOWER_CONTROL, LCD_DISPLAY_ADDRESS); //Follower Control
+	LCD_i2c_send_command(COMMAND_8BIT_4LINES_RE0_IS1, LCD_DISPLAY_ADDRESS);  //Function set : RE = 0, IS = 1
+	LCD_i2c_send_command(COMMAND_DISPLAY_ON_CURSOR_OFF_BLINK_OFF, LCD_DISPLAY_ADDRESS);  //Display ON (without cursor...)
+	LCD_i2c_send_command(COMMAND_BS0_1, LCD_DISPLAY_ADDRESS);  //Set BS0 = 1 (1/6 bias) / Internal frequency..
+	LCD_i2c_send_command(COMMAND_INTERNAL_DIVIDER_680, LCD_DISPLAY_ADDRESS); //Internal divider
+	LCD_i2c_send_command(COMMAND_CONTRAST, LCD_DISPLAY_ADDRESS); //Constrast
+	LCD_i2c_send_command(COMMAND_POWER_ICON_CONTRAST, LCD_DISPLAY_ADDRESS);  //Power Icon control contrast
+	LCD_i2c_send_command(COMMAND_FOLLOWER_CONTROL, LCD_DISPLAY_ADDRESS); //Follower Control
 		
 	//RE = 0  | IS = 0
 	//LCD_i2c_send_command(COMMAND_8BIT_4LINES_RE0_IS0, LCD_DISPLAY_ADDRESS);
@@ -172,31 +168,29 @@ void LCD_i2c_writeByte( uint8_t pdata)
         }
     };
 		
-		i2c_flag_clear(I2C1, I2C_FLAG_ADDSEND);/////must be
-		while(!i2c_flag_get(I2C1, I2C_FLAG_TBE));///////
+	i2c_flag_clear(I2C1, I2C_FLAG_ADDSEND);/////must be
+	while(!i2c_flag_get(I2C1, I2C_FLAG_TBE));///////
 		
-		 i2c_ack_config(I2C1, I2C_ACK_ENABLE);
+	i2c_ack_config(I2C1, I2C_ACK_ENABLE);
 		
     i2c_data_transmit(I2C1, 0x40);
         /* wait until the TBE bit is set */
-    //while(!i2c_flag_get(I2C1, I2C_FLAG_TBE));
-		
-		i2c_data_transmit(I2C1, pdata);
+    while(!i2c_flag_get(I2C1, I2C_FLAG_TBE));
+
+    i2c_data_transmit(I2C1, pdata);
 			
-		while(!i2c_flag_get(I2C1, I2C_FLAG_TBE));
+    while(!i2c_flag_get(I2C1, I2C_FLAG_TBE));
 			
-   
     /* send a stop condition to I2C bus */
-		i2c_ack_config(I2C1, I2C_ACK_DISABLE);
+    i2c_ack_config(I2C1, I2C_ACK_DISABLE);
 		
     i2c_stop_on_bus(I2C1);
     /* wait until stop condition generate */ 
 
-		while(I2C_CTL0(I2C1) & I2C_CTL0_STOP);  
+    while(I2C_CTL0(I2C1) & I2C_CTL0_STOP);  
 		
 
 }
-
 
 
 // Write byte in CGRAM display
@@ -235,15 +229,15 @@ void LCD_CGRAM_writeByte( uint8_t pdata, uint8_t location)
         }
     };
 		
-		 i2c_ack_config(I2C1, I2C_ACK_ENABLE);
+	i2c_ack_config(I2C1, I2C_ACK_ENABLE);
 		
     i2c_data_transmit(I2C1, location);
         /* wait until the TBE bit is set */
     while(!i2c_flag_get(I2C1, I2C_FLAG_TBE));
 		
-		i2c_data_transmit(I2C1, pdata);
-			
-		while(!i2c_flag_get(I2C1, I2C_FLAG_TBE));
+    i2c_data_transmit(I2C1, pdata);
+
+    while(!i2c_flag_get(I2C1, I2C_FLAG_TBE));
 			
     /* send a stop condition to I2C bus */
 		
@@ -255,7 +249,6 @@ void LCD_CGRAM_writeByte( uint8_t pdata, uint8_t location)
 		while(I2C_CTL0(I2C1) & I2C_CTL0_STOP);  
 		
 }
-
 
 
 //set display backlight
@@ -281,7 +274,6 @@ void LCD_i2c_sendString(char* str)
 
   while(str[i]!=0)
   {
-
 		LCD_i2c_writeByte(str[i]);
 		i++;
 
@@ -295,18 +287,15 @@ void LCD_i2c_sendData(uint8_t data[])
 	uint8_t i=0;
 	 while(i!= sizeof(data))
   {
-
 		LCD_i2c_writeByte(data[i]);
 		i++;
 
 	}
-	
 }
 //Function for create Custom symbol in CGRAM memory display
 //
 void LCD_createChar(uint8_t location, uint8_t charmap[])
 {
-
 	LCD_i2c_send_command(COMMAND_8BIT_4LINES_RE0_IS0, LCD_DISPLAY_ADDRESS);//!!!Very important RE must be 0, IS must be 0!!!!
 
 	location &= 0x7;
@@ -314,8 +303,6 @@ void LCD_createChar(uint8_t location, uint8_t charmap[])
 
 	for(uint8_t i = 0; i < 8; i++)
 			LCD_i2c_writeByte(charmap[i]);
-			
-
 }
 
 //Function for start i2c config
